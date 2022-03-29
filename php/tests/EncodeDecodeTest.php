@@ -45,6 +45,21 @@ class EncodeDecodeTest extends TestBase
         $this->assertEquals(1, $m->getOptionalInt32());
     }
 
+    public function testDecodeJsonUnknown()
+    {
+        $this->expectException(Exception::class);
+
+        $m = new TestMessage();
+        $m->mergeFromJsonString("{\"unknown\":1}");
+    }
+
+    public function testDecodeJsonIgnoreUnknown()
+    {
+        $m = new TestMessage();
+        $m->mergeFromJsonString("{\"unknown\":1}", true);
+        $this->assertEquals("{}", $m->serializeToJsonString());
+    }
+
     public function testDecodeTopLevelBoolValue()
     {
         $m = new BoolValue();
@@ -683,6 +698,16 @@ class EncodeDecodeTest extends TestBase
         $m->mergeFromString(hex2bin('7A01'));
     }
 
+    public function testEncodeDecodeValidUtf8()
+    {
+        $m = new TestMessage();
+        $m->mergeFromJsonString("{\"optionalString\":\"\\u1000\"}");
+        $serialized = $m->serializeToString();
+        $m2 = new TestMessage();
+        $m2->mergeFromString($serialized);
+        $this->assertSame($m->getOptionalString(), $m2->getOptionalString());
+    }
+
     public function testDecodeInvalidEnum()
     {
         $this->expectException(Exception::class);
@@ -923,6 +948,14 @@ class EncodeDecodeTest extends TestBase
         $to = new TestMessage();
         $to->mergeFromJsonString($data);
         $this->expectFields($to);
+    }
+
+    public function testJsonEncodeNullSubMessage()
+    {
+        $from = new TestMessage();
+        $from->setOptionalMessage(null);
+        $data = $from->serializeToJsonString();
+        $this->assertEquals("{}", $data);
     }
 
     public function testDecodeDuration()

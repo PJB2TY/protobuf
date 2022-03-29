@@ -46,7 +46,7 @@ src/.libs
 any_test.pb.*
 map*unittest.pb.*
 unittest*.pb.*
-cpp_test*.pb.*
+src/google/protobuf/compiler/cpp/test*.pb.*
 src/google/protobuf/util/**/*.pb.cc
 src/google/protobuf/util/**/*.pb.h
 
@@ -82,10 +82,7 @@ src/**/*.log
 src/**/*.trs
 
 # JavaBuild output.
-java/core/target
-java/lite/target
-java/util/target
-javanano/target
+java/**/target
 java/.idea
 java/**/*.iml
 
@@ -186,7 +183,6 @@ js/testproto_libs2.js
 /bazel-*
 
 # ruby test output
-ruby/lib/
 ruby/tests/basic_test_pb.rb
 ruby/tests/basic_test_proto2_pb.rb
 ruby/tests/generated_code_pb.rb
@@ -206,8 +202,8 @@ cmake/.idea
 cmake/cmake-build-debug/
 
 # Common build subdirectories.
-./.build/
-./_build/
+.build/
+_build/
 
 # Visual Studio 2017
 .vs
@@ -219,5 +215,14 @@ cmake/cmake-build-debug/
 .idea
 *.iml
 
+# Eclipse
+**/.settings
+**/.project
+**/.classpath
+
 # BenchmarkDotNet
 BenchmarkDotNet.Artifacts/
+
+# Clangd uses these common ephemeral files
+.cache
+compile_commands.json
